@@ -37,7 +37,6 @@ It is always important to log errors, but even more so with highly concurrent as
 
 // recommendation of good practice ADMONITION link
 
-
 [#retry]
 === Retry
 
@@ -54,41 +53,39 @@ Transient errors -- such as those caused by resource starvation -- are best tack
 
 async Task changeEmail()
 {
-		var attempts = MaxRetries; // eg 5
-		while (attempts-- > 0)
-		{
-			  // will throw KeyNotfoundException if key doesn't exist
-	  		var document = await collection.GetAsync("doc_id");
-				var user = document.ContentAs<User>();
-				user.Email = "john.smith@couchbase.com";
+	var attempts = MaxRetries; // eg 5
+	while (attempts-- > 0)
+	{
+			// will throw KeyNotfoundException if key doesn't exist
+		var document = await collection.GetAsync("doc_id");
+			var user = document.ContentAs<User>();
+			user.Email = "john.smith@couchbase.com";
 
-				try
-				{
-						await collection.ReplaceAsync("doc_id", user);
+			try
+			{
+					await collection.ReplaceAsync("doc_id", user);
 
-						// replace succeeded, break from loop
-						break;
-				}
-				catch (CouchbaseException exception)
-				{
-						if (!exception.IsRetryable())
-						{
-								// unrecoverable error (network failure, etc)
-								throw;
-						}
-				}
+					// replace succeeded, break from loop
+					break;
+			}
+			catch (CouchbaseException exception)
+			{
+					if (!exception.IsRetryable())
+					{
+							// unrecoverable error (network failure, etc)
+							throw;
+					}
+			}
 
-				// wait 100 milliseconds before trying again
-				Task.Delay(100);
-		}
+			// wait 100 milliseconds before trying again
+			Task.Delay(100);
+	}
 }
 ----
-
 
 == KV
 
 The KV Service exposes several common errors that can be encountered - both during development, and to be handled by the production app. Here we will cover some of the most common errors.
-
 
 === Key does not exist
 
@@ -104,7 +101,6 @@ catch (KeyNotFoundException)
 }
 ----
 
-
 === Key already exists
 
 [source,csharp]
@@ -118,7 +114,6 @@ catch (KeyExistsException)
     // key already exists
 }
 ----
-
 
 === Document body too large
 

@@ -48,7 +48,9 @@ From the Package Manager Console within your project:
  ** To install a specific version, include the version parameter.
 For example:
 
- Install-Package CouchbaseNetClient -Version 2.7.0
+ Install-Package CouchbaseNetClient -Version 3.0.2
+
+You can change the `-Version` number above to the latest version as desired.
 
 === Downloading and referencing the binaries
 
